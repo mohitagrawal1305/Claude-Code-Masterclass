@@ -38,6 +38,36 @@ export default function Home() {
             Ready to plan your first heist? Sign up or log in to get started!
           </p>
         </div>
+
+        <div className="mt-10 flex gap-4">
+          <a
+            href="/login"
+            className="px-6 py-2 rounded-lg bg-primary text-dark font-semibold hover:opacity-90 transition-opacity"
+          >
+            Log in
+          </a>
+          <a
+            href="/signup"
+            className="px-6 py-2 rounded-lg border border-primary text-primary font-semibold hover:bg-primary/10 transition-colors"
+          >
+            Sign up
+          </a>
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl">
+          <div className="bg-light rounded-xl p-5">
+            <div className="text-2xl font-bold text-primary">120+</div>
+            <div className="text-sm text-body mt-1">Heists completed</div>
+          </div>
+          <div className="bg-light rounded-xl p-5">
+            <div className="text-2xl font-bold text-secondary">34</div>
+            <div className="text-sm text-body mt-1">Active agents</div>
+          </div>
+          <div className="bg-light rounded-xl p-5">
+            <div className="text-2xl font-bold text-success">98%</div>
+            <div className="text-sm text-body mt-1">Smiles generated</div>
+          </div>
+        </div>
       </div>
     </div>
   );
