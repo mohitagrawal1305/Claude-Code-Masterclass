@@ -26,6 +26,7 @@ Create a single `AuthForm` component accepting `mode: "login" | "signup"`. Both 
 - `Link` from `next/link` for the switch-form link
 - Validation runs **on submit only**:
   - Email empty → "Email is required."
+  - Email not a valid format (`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`) → "Please enter a valid email address."
   - Password < 5 chars → "Password must be at least 5 characters."
   - Password no special char → "Password must contain at least 1 special character."
   - Valid → `console.log({ email, password })`
@@ -60,6 +61,7 @@ Tests to cover (per spec Testing Guidelines):
 Additional meaningful tests:
 - Toggle button aria-label updates on click
 - Email required error appears on empty submit
+- Invalid email format error appears for malformed emails (e.g. "notanemail")
 - Password length error appears when < 5 chars
 - Special char error appears when ≥ 5 chars but no special char
 - No errors shown for valid input

@@ -1,0 +1,49 @@
+@reference "../../app/globals.css";
+
+.form {
+  @apply flex flex-col gap-5 w-full max-w-sm mx-auto;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.label {
+  @apply text-sm text-body;
+}
+
+.input {
+  @apply w-full bg-lighter border border-lighter rounded-md px-3 py-2 text-heading text-sm outline-none focus:border-primary transition-colors;
+}
+
+.inputError {
+  @apply border-error;
+}
+
+.error {
+  @apply text-xs text-error;
+}
+
+.passwordWrapper {
+  @apply relative;
+}
+
+.passwordWrapper .input {
+  @apply pr-10;
+}
+
+.toggleBtn {
+  @apply absolute right-3 top-1/2 -translate-y-1/2 text-body hover:text-heading transition-colors cursor-pointer;
+}
+
+.submitBtn {
+  @apply w-full py-2 rounded-md font-semibold text-sm bg-primary text-dark hover:opacity-90 transition-opacity cursor-pointer mt-1;
+}
+
+.switchText {
+  @apply text-center text-sm text-body;
+}
+
+.switchLink {
+  @apply text-primary hover:text-secondary transition-colors;
+}
