@@ -51,3 +51,6 @@ Custom slash commands live in `.claude/commands/`:
 
 - Specs live in `specs/` (human-readable requirements using `specs/template.md`)
 - Implementation plans live in `_plans/` (detailed technical plans for Claude to execute)
+
+## Checking Documentation
+- **important:** When implementing any lib/framework-soecific features, Always check the appropriate lib/framework documentation using Context7 MCP server before writing any code.

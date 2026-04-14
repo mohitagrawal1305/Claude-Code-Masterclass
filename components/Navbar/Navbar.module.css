@@ -15,3 +15,16 @@
 svg.logo {
   display: inline-block;
 }
+
+.createBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: linear-gradient(to right, #9810FA, #E60076);
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+}
