@@ -1,8 +1,32 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi } from "vitest"
 import AuthForm from "@/components/AuthForm"
 
+vi.mock("@/lib/firebase/config", () => ({ default: {} }))
+vi.mock("firebase/auth", () => ({
+  getAuth: vi.fn(),
+  createUserWithEmailAndPassword: vi.fn(),
+  updateProfile: vi.fn(),
+}))
+vi.mock("firebase/firestore", () => ({
+  getFirestore: vi.fn(),
+  setDoc: vi.fn(),
+  doc: vi.fn(),
+}))
+vi.mock("firebase/app", () => ({
+  FirebaseError: class FirebaseError extends Error {
+    code: string
+    constructor(code: string, message: string) {
+      super(message)
+      this.code = code
+    }
+  },
+}))
+vi.mock("@/lib/firebase/auth", () => ({ auth: {} }))
+vi.mock("@/lib/firebase/firestore", () => ({ db: {} }))
+vi.mock("@/lib/generateCodename", () => ({ generateCodename: vi.fn(() => "SilentCrimsonFerret") }))
+vi.mock("next/navigation", () => ({ useRouter: vi.fn(() => ({ push: vi.fn() })) }))
 vi.mock("next/link", () => ({
   default: ({ href, children }: { href: string; children: React.ReactNode }) => (
     <a href={href}>{children}</a>
@@ -86,34 +110,5 @@ describe("AuthForm — validation", () => {
     await userEvent.type(screen.getByLabelText("Password"), "abcde")
     await userEvent.click(screen.getByRole("button", { name: "Log In" }))
     expect(screen.getByText("Password must contain at least 1 special character.")).toBeInTheDocument()
-  })
-})
-
-describe("AuthForm — submit behaviour", () => {
-  beforeEach(() => {
-    vi.spyOn(console, "log").mockImplementation(() => {})
-    vi.clearAllMocks()
-  })
-
-  it("calls console.log with email and password on valid login submit", async () => {
-    render(<AuthForm mode="login" />)
-    await userEvent.type(screen.getByLabelText("Email"), "test@example.com")
-    await userEvent.type(screen.getByLabelText("Password"), "hello!")
-    await userEvent.click(screen.getByRole("button", { name: "Log In" }))
-    expect(console.log).toHaveBeenCalledWith({ email: "test@example.com", password: "hello!" })
-  })
-
-  it("calls console.log with email and password on valid signup submit", async () => {
-    render(<AuthForm mode="signup" />)
-    await userEvent.type(screen.getByLabelText("Email"), "new@example.com")
-    await userEvent.type(screen.getByLabelText("Password"), "pass#1")
-    await userEvent.click(screen.getByRole("button", { name: "Sign Up" }))
-    expect(console.log).toHaveBeenCalledWith({ email: "new@example.com", password: "pass#1" })
-  })
-
-  it("does not call console.log when validation fails", async () => {
-    render(<AuthForm mode="login" />)
-    await userEvent.click(screen.getByRole("button", { name: "Log In" }))
-    expect(console.log).not.toHaveBeenCalled()
   })
 })
