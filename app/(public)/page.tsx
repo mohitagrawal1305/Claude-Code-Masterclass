@@ -2,73 +2,73 @@
 // when logged in --> to /heists
 // when not logged in --> to /login
 
-import { Clock8 } from "lucide-react";
+import { Clock8, ChevronRight } from "lucide-react";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className="center-content">
-      <div className="page-content">
-        <h1>
-          P<Clock8 className="logo" strokeWidth={2.75} />
-          cket Heist
-        </h1>
-        <div>Tiny missions. Big office mischief.</div>
+    <div className={styles.wrapper}>
+      {/* Background atmosphere */}
+      <div className={styles.grid} aria-hidden />
+      <div className={styles.orbPurple} aria-hidden />
+      <div className={styles.orbPink} aria-hidden />
 
-        <div className="mt-8 space-y-4 max-w-2xl">
-          <p>
-            Welcome to Pocket Heist, where office pranks meet mission planning.
-            Turn your workplace into a playground with cleverly orchestrated
-            shenanigans that keep everyone on their toes.
-          </p>
-
-          <p>
-            Create secret missions, assign them to your fellow troublemakers,
-            and watch as harmless chaos unfolds. From strategic stapler
-            relocations to mysterious coffee cup disappearances, every heist is
-            a chance to brighten someones day with a bit of unexpected fun.
-          </p>
-
-          <p>
-            Track your active missions, monitor assigned heists, and build your
-            reputation as the offices most creative mischief-maker. Remember:
-            the best pranks are harmless, hilarious, and leave everyone smiling.
-          </p>
-
-          <p className="text-sm text-body/70 italic">
-            Ready to plan your first heist? Sign up or log in to get started!
-          </p>
+      <main className={styles.main}>
+        {/* Status badge */}
+        <div className={styles.badge}>
+          <span className={styles.pulseDot} />
+          Mission briefing open
         </div>
 
-        <div className="mt-10 flex gap-4">
-          <a
-            href="/login"
-            className="px-6 py-2 rounded-lg bg-primary text-dark font-semibold hover:opacity-90 transition-opacity"
-          >
+        {/* Title */}
+        <h1 className={styles.title}>
+          P<Clock8 className="logo" strokeWidth={2.75} />
+          cket{" "}
+          <span className={styles.titleAccent}>Heist</span>
+        </h1>
+
+        <p className={styles.tagline}>Tiny missions. Big office mischief.</p>
+
+        <p className={styles.description}>
+          Turn your workplace into a playground. Plan clever pranks, assign
+          missions to fellow troublemakers, and orchestrate harmless chaos that
+          keeps everyone smiling. The best agents leave no fingerprints — only
+          laughter.
+        </p>
+
+        {/* CTAs */}
+        <div className={styles.ctas}>
+          <a href="/signup" className={styles.btnRegister}>
+            Register for free
+            <ChevronRight size={15} />
+          </a>
+          <a href="/login" className={styles.btnLogin}>
             Log in
           </a>
-          <a
-            href="/signup"
-            className="px-6 py-2 rounded-lg border border-primary text-primary font-semibold hover:bg-primary/10 transition-colors"
-          >
-            Sign up
-          </a>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl">
-          <div className="bg-light rounded-xl p-5">
-            <div className="text-2xl font-bold text-primary">120+</div>
-            <div className="text-sm text-body mt-1">Heists completed</div>
+        {/* Stats */}
+        <div className={styles.stats}>
+          <div className={styles.stat}>
+            <span className={styles.statNum} style={{ color: "var(--color-primary)" }}>
+              120+
+            </span>
+            <span className={styles.statLabel}>Heists completed</span>
           </div>
-          <div className="bg-light rounded-xl p-5">
-            <div className="text-2xl font-bold text-secondary">34</div>
-            <div className="text-sm text-body mt-1">Active agents</div>
+          <div className={styles.stat}>
+            <span className={styles.statNum} style={{ color: "var(--color-secondary)" }}>
+              34
+            </span>
+            <span className={styles.statLabel}>Active agents</span>
           </div>
-          <div className="bg-light rounded-xl p-5">
-            <div className="text-2xl font-bold text-success">98%</div>
-            <div className="text-sm text-body mt-1">Smiles generated</div>
+          <div className={styles.stat}>
+            <span className={styles.statNum} style={{ color: "var(--color-success)" }}>
+              98%
+            </span>
+            <span className={styles.statLabel}>Smiles generated</span>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
