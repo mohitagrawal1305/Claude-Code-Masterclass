@@ -3,6 +3,13 @@
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { setDoc, doc } from "firebase/firestore"
+import { FirebaseError } from "firebase/app"
+import { auth } from "@/lib/firebase/auth"
+import { db } from "@/lib/firebase/firestore"
+import { generateCodename } from "@/lib/generateCodename"
 import styles from "./AuthForm.module.css"
 
 type AuthFormMode = "login" | "signup"
@@ -10,6 +17,7 @@ type AuthFormMode = "login" | "signup"
 interface FormErrors {
   email?: string
   password?: string
+  form?: string
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -28,6 +36,7 @@ export default function AuthForm({ mode }: { mode: AuthFormMode }) {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
+  const router = useRouter()
 
   const isLogin = mode === "login"
   const title = isLogin ? "Log in to Your Account" : "Signup for an Account"
@@ -36,12 +45,37 @@ export default function AuthForm({ mode }: { mode: AuthFormMode }) {
   const switchLabel = isLogin ? "Sign up" : "Log in"
   const switchHref = isLogin ? "/signup" : "/login"
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const errs = validate(email, password)
     setErrors(errs)
-    if (Object.keys(errs).length === 0) {
-      console.log({ email, password })
+    if (Object.keys(errs).length > 0) return
+
+    if (mode === "signup") {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+        const codename = generateCodename()
+        await updateProfile(userCredential.user, { displayName: codename })
+        try {
+          await setDoc(doc(db, "users", userCredential.user.uid), {
+            id: userCredential.user.uid,
+            codename,
+          })
+        } catch (firestoreErr) {
+          console.error("Firestore write failed:", firestoreErr)
+        }
+        router.push("/heists")
+      } catch (err) {
+        if (err instanceof FirebaseError) {
+          if (err.code === "auth/email-already-in-use") {
+            setErrors({ email: "An account with this email already exists." })
+          } else {
+            setErrors({ form: "Something went wrong. Please try again." })
+          }
+        }
+      }
+    } else {
+      // TODO: login
     }
   }
 
@@ -92,6 +126,10 @@ export default function AuthForm({ mode }: { mode: AuthFormMode }) {
       </div>
 
       <button type="submit" className={styles.submitBtn}>{submitLabel}</button>
+
+      {errors.form && (
+        <p className={styles.error}>{errors.form}</p>
+      )}
 
       <p className={styles.switchText}>
         {switchText}{" "}
